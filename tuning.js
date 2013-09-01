@@ -2,7 +2,7 @@
 
 'use strict';
 
-var commander = require('commander');
+var program = require('commander');
 
 /**
  * A note.
@@ -38,7 +38,7 @@ Note.prototype = {
     }
     console.assert(newName !== undefined, "Could not find note name for PC " + newPc);
     newNote = new Note(newName);
-    newNote.octave += octaveMultiplier;
+    newNote.octave = this.octave + octaveMultiplier;
     return newNote;
   }
 };
@@ -70,15 +70,14 @@ Temperament.prototype = {
 };
 
 if (require.main === module) {
-  commander
+  program
     .option('-n, --note <string>', 'The name of the note.', String, 'C4')
     .option('-f, --fundamental <string>', 'The name of the fundamental.', String, 'C2')
     .option('-d, --division <int>', 'The octave division (12 for ET).', parseInt, 12)
     .option('-A <int>', 'The frequency of A4 in Hz.', parseInt, 440)
     .parse(process.argv);
-  console.assert(commander.note !== undefined, 'No note specified.');
-  var note = new Note(commander.note),
-    temperament = new Temperament(commander.division, new Note(commander.fundamental), commander.A),
+  var note = new Note(program.args[0] !== undefined ? program.args[0] : program.note),
+    temperament = new Temperament(program.division, new Note(program.fundamental), program.A),
     newNote;
   console.log("%s: %s Hz", note, temperament.getFrequency(note));
   for (var i = 1; i <= 12; i++) {
