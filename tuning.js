@@ -25,9 +25,9 @@ Note.prototype = {
     return this.name + this.accidental + this.octave;
   },
   transpose: function (interval) {
-    var newPc = this.pitchClass + interval, newName, noteName, newNote;
-    if (newPc > 11) {
-      newPc -= 12;
+    var newPc = this.pitchClass + interval, newName, noteName, newNote, octaveMultiplier = Math.floor(newPc / 12);
+    if (newPc > 11 || newPc < 0) {
+      newPc -= 12 * octaveMultiplier;
     }
     // @todo sort out preference order
     for (noteName in this.pitchClasses) {
@@ -38,7 +38,7 @@ Note.prototype = {
     }
     console.assert(newName !== undefined, "Could not find note name for PC " + newPc);
     newNote = new Note(newName);
-    newNote.octave = newPc < this.pitchClass + interval ? this.octave + 1 : this.octave;
+    newNote.octave += octaveMultiplier;
     return newNote;
   }
 };
