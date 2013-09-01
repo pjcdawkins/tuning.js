@@ -1,0 +1,22 @@
+{
+  "name": "tuning.js",
+  "version": "0.0.0",
+  "description": "",
+  "main": "tuning.js",
+  "dependencies": {
+    "commander": "~2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pjcdawkins/tuning.js.git"
+  },
+  "author": "pjcdawkins",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/pjcdawkins/tuning.js/issues"
+  }
+}
