@@ -25,7 +25,10 @@ Note.prototype = {
     return this.name + this.accidental + this.octave;
   },
   transpose: function (interval) {
-    var newPc = this.pitchClass + interval, newName, noteName, newNote, octaveMultiplier = Math.floor(newPc / 12);
+    var newPc = this.pitchClass + interval,
+      octaveMultiplier = Math.floor(newPc / 12),
+      newName,
+      noteName;
     if (newPc > 11 || newPc < 0) {
       newPc -= 12 * octaveMultiplier;
     }
@@ -36,10 +39,8 @@ Note.prototype = {
         break;
       }
     }
-    console.assert(newName !== undefined, "Could not find note name for PC " + newPc);
-    newNote = new Note(newName);
-    newNote.octave = this.octave + octaveMultiplier;
-    return newNote;
+    newName += (this.octave + octaveMultiplier);
+    return new Note(newName);
   }
 };
 
@@ -79,9 +80,12 @@ if (require.main === module) {
   var note = new Note(program.args[0] !== undefined ? program.args[0] : program.note),
     temperament = new Temperament(program.division, new Note(program.fundamental), program.A),
     newNote;
-  console.log("%s: %s Hz", note, temperament.getFrequency(note));
-  for (var i = 1; i <= 12; i++) {
+  for (var i = 0; i <= 12; i++) {
     newNote = note.transpose(i);
     console.log("%s: %s Hz", newNote, temperament.getFrequency(newNote));
   }
+}
+else {
+  module.exports.Note = Note;
+  module.exports.Temperament = Temperament;
 }
