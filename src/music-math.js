@@ -23,18 +23,18 @@ function centsToFrequency(cents, base) {
 }
 
 /**
- * Convert a number of cents to a difference from A.
+ * Convert a number of cents to a difference from C4.
  *
  * @param {number} cents
- *   The number of cents above C.
+ *   The number of cents above C4.
  * @param {number=4} octave
  *   The octave in scientific pitch notation.
  *
  * @return {number}
- *   The number of cents above A.
+ *   The number of cents above C4.
  */
-function centsOverA(cents, octave) {
-    return cents - 900 + 1200 * ((octave || 4) - 4);
+function centsOverC(cents, octave) {
+    return cents + 1200 * ((octave || 4) - 4);
 }
 
 /**
@@ -66,9 +66,9 @@ function centsToStringLength(cents) {
  */
 function frequencyToRatio(frequency, base, precision) {
     precision = precision || 2;
-    function getGcd(x, y, precision) {
+    function getGcd(x, y) {
         var z, d = x;
-        while (y.toFixed(precision) != 0) {
+        while (y != 0) {
             z = d % y;
             d = y;
             y = z;
@@ -77,16 +77,16 @@ function frequencyToRatio(frequency, base, precision) {
         return d;
     }
     var gcd = getGcd(frequency, base),
-        ratio = [(base / gcd).toFixed(precision), (frequency / gcd).toFixed(precision)];
+        ratio = [base / gcd, frequency / gcd];
 
-    return base > frequency ? ratio : ratio.reverse();
+    return base <= frequency ? ratio : ratio.reverse();
 }
 
 module.exports = {
     'frequenciesToCents': frequenciesToCents,
     'centsToFrequency': centsToFrequency,
     'stringLengthToCents': stringLengthToCents,
-    'centsOverA': centsOverA,
+    'centsOverC': centsOverC,
     'centsToStringLength': centsToStringLength,
     'frequencyToRatio': frequencyToRatio
 };

@@ -20,7 +20,7 @@ EqualTemperament.prototype = {
      */
     getFrequency: function (note) {
         return MusicMath.centsToFrequency(
-            MusicMath.centsOverA(note.getCents(), note.octave),
+            MusicMath.centsOverC(note.getCents(), note.octave) - 900,
             this.A
         );
     }

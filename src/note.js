@@ -18,13 +18,14 @@ var Note = function () {
  */
 Note.fromString = function (noteString) {
     // @todo create note from frequency or ratio.
-    var matches = noteString.match(/^([A-Ga-g]) ?(([b#sfx]|(sharp|flat|bb|double sharp|double flat))? ?([\+\-]|(quarter flat|quarter sharp))?)? ?(\:)? ?(\-?[0-9]+)?$/);
+    var matches = noteString.match(/^([A-Ga-g])(([b#sfx]|(bb| ?sharp| ?flat| ?double sharp| ?double flat))?([\+\-]|(quarter flat|quarter sharp))?)? ?(\-?[0-9]+)?$/);
     assert.ok(matches !== null, 'Invalid note "' + noteString + '"');
     var note = new this();
     note.name = matches[1].toUpperCase();
     note.accidental = '';
     if (typeof matches[2] !== "undefined") {
         note.accidental = matches[2]
+          .trim()
           .replace('double sharp', 'x')
           .replace('double flat', 'bb')
           .replace('quarter sharp', '+')
@@ -32,9 +33,28 @@ Note.fromString = function (noteString) {
           .replace('f', 'b')
           .replace('s', '#');
     }
-    note.octave = typeof matches[8] !== "undefined" ? parseInt(matches[8], 10) : 4;
+    note.octave = typeof matches[7] !== "undefined" ? parseInt(matches[7], 10) : 4;
 
     return note;
+};
+
+/**
+ * Create a note from a cents value.
+ *
+ * @param {number} cents
+ *   A number of cents above C4.
+ *
+ * @return {Note}
+ */
+Note.fromCents = function (cents) {
+    for (var noteName in noteNames) {
+        if (noteNames.hasOwnProperty(noteName) && noteNames[noteName] == cents) {
+            break;
+        }
+    }
+    assert.ok(noteName, 'Note name not found (cents: ' + cents + ')');
+
+    return Note.fromString(noteName);
 };
 
 Note.prototype = {
@@ -44,7 +64,7 @@ Note.prototype = {
      * @returns {string}
      */
     toString: function () {
-        return '' + this.name + this.accidental + ':' + this.octave;
+        return '' + this.name + this.accidental + (this.accidental == '-' ? ' ' : '') + this.octave;
     },
     /**
      * Get the cents value of this note, assuming 12-tone equal temperament.
@@ -88,21 +108,14 @@ Note.prototype = {
     transpose: function (interval) {
         var newCents = this.getCents() + interval * 100,
             octaveMultiplier = Math.floor(newCents / 1200),
-            newName,
-            noteName;
+            newNote;
         if (newCents > 1150 || newCents < 0) {
             newCents -= 1200 * octaveMultiplier;
         }
-        // @todo sort out preference order
-        for (noteName in noteNames) {
-            if (noteNames.hasOwnProperty(noteName) && noteNames[noteName] === newCents) {
-                newName = noteName;
-                break;
-            }
-        }
-        newName += (this.octave + octaveMultiplier);
+        newNote =  Note.fromCents(newCents);
+        newNote.octave = this.octave + octaveMultiplier;
 
-        return Note.fromString(newName);
+        return newNote;
     }
 };
 
