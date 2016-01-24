@@ -36,17 +36,19 @@ if (require.main === module) {
     console.log("Frequency: %d Hz", round(frequency));
     console.log("%d cents %s C4", centsOverC >= 0 ? centsOverC : - centsOverC, centsOverC >= 0 ? 'above' : 'below');
     //console.log("Ratio to A4: %s", MusicMath.frequencyToRatio(frequency, program.A).join(':'));
-    console.log('');
     var strings = {
         'Violin E': 1600,
-        'Violin A': 900,
-        'Violin D': 200,
-        'Violin G': -500,
+        'Violin/Viola A': 900,
+        'Violin/Viola D': 200,
         'Cello A': -300,
+        'Violin/Viola G': -500,
         'Viola C': -1200,
         'Cello D': -1000,
-        'Cello G': -1700,
-        'Cello C': -2400
+        'Cello/Bass G': -1700,
+        'Cello C': -2400,
+        'Bass D': -2200,
+        'Bass A': -2700,
+        'Bass E': -3200
     };
     for (var string in strings) {
         if (strings.hasOwnProperty(string) && strings[string] <= centsOverC) {
