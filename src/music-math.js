@@ -60,12 +60,10 @@ function centsToStringLength(cents) {
  *
  * @param {number} frequency
  * @param {number} base
- * @param {number=2} precision
  *
  * @returns Array
  */
-function frequencyToRatio(frequency, base, precision) {
-    precision = precision || 2;
+function frequencyToRatio(frequency, base) {
     function getGcd(x, y) {
         var z, d = x;
         while (y != 0) {
@@ -87,6 +85,5 @@ module.exports = {
     'centsToFrequency': centsToFrequency,
     'stringLengthToCents': stringLengthToCents,
     'centsOverC': centsOverC,
-    'centsToStringLength': centsToStringLength,
-    'frequencyToRatio': frequencyToRatio
+    'centsToStringLength': centsToStringLength
 };
