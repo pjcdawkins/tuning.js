@@ -34,7 +34,9 @@ function centsToFrequency(cents, base) {
  *   The number of cents above C4.
  */
 function centsOverC(cents, octave) {
-    return cents + 1200 * ((octave || 4) - 4);
+    octave = typeof octave !== "undefined" ? octave : 4;
+
+    return cents + 1200 * (octave - 4);
 }
 
 /**

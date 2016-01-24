@@ -50,16 +50,13 @@ if (require.main === module) {
         'Bass A': -2700,
         'Bass E': -3200
     };
+    var stringLength;
     for (var string in strings) {
         if (strings.hasOwnProperty(string) && strings[string] <= centsOverC) {
-            console.log(
-                "String length (on %s string): %d%",
-                string,
-                round(
-                    MusicMath.centsToStringLength(centsOverC - strings[string]) * 100,
-                    2
-                )
-            );
+            stringLength = MusicMath.centsToStringLength(centsOverC - strings[string]);
+            if (stringLength >= 0.05) {
+                console.log("String length (on %s string): %d%", string, round(stringLength * 100, 2));
+            }
         }
     }
 }
