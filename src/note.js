@@ -3,6 +3,9 @@ var assert = require('assert');
 
 var Note = function () {
     assert.ok(arguments.callee.caller !== null, 'Use a factory method to create a Note');
+    this.name = 'A';
+    this.accidental = '';
+    this.octave = 4;
 };
 
 /**

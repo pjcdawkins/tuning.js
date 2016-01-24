@@ -1,4 +1,5 @@
 var Note = require('../note.js');
+var MusicMath = require('../music-math.js');
 
 /**
  * An equal temperament tuning system.
@@ -18,12 +19,10 @@ EqualTemperament.prototype = {
      * @returns {number}
      */
     getFrequency: function (note) {
-        var getSteps = function (fromNote, toNote) {
-                return toNote.getCents() - fromNote.getCents() + (1200 * (toNote.octave - fromNote.octave));
-            },
-            factor = Math.pow(2, 1 / 1200),
-            steps = getSteps(Note.fromString('A4'), note);
-        return this.A * Math.pow(factor, steps);
+        return MusicMath.centsToFrequency(
+            MusicMath.centsOverA(note.getCents(), note.octave),
+            this.A
+        );
     }
 };
 

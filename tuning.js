@@ -3,8 +3,9 @@
 'use strict';
 
 var program = require('commander');
-var EqualTemperament = require('./lib/systems/et.js');
-var Note = require('./lib/note.js');
+var EqualTemperament = require('./src/systems/et.js');
+var Note = require('./src/note.js');
+var MusicMath = require('./src/music-math.js');
 
 /**
  * Round a number to a given precision.
@@ -27,6 +28,12 @@ if (require.main === module) {
         .option('-A <int>', 'The frequency of A4 in Hz.', parseInt, 440)
         .parse(process.argv);
     var note = Note.fromString(program.args[0] !== undefined ? program.args[0] : program.note),
-        scale = new EqualTemperament(program.A);
-    console.log("%s\t%d Hz", note, round(scale.getFrequency(note)));
+        scale = new EqualTemperament(program.A),
+        frequency = scale.getFrequency(note),
+        centsOverA = MusicMath.centsOverA(note.getCents(), note.octave);
+    console.log("Note: %s", note);
+    console.log("%d cents %s A4", centsOverA >= 0 ? centsOverA : - centsOverA, centsOverA >= 0 ? 'above' : 'below');
+    console.log("Frequency: %d Hz", round(frequency));
+    console.log("Ratio to A4: %s", MusicMath.frequencyToRatio(frequency, program.A).join(':'));
+    console.log("String length (on A4 string): %d%", round(MusicMath.centsToStringLength(centsOverA) * 100));
 }
